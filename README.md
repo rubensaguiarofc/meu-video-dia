@@ -1,0 +1,135 @@
+# Meu Vídeo do Dia
+
+**🎬 App de vídeos diários para todos os usuários**
+
+Um vídeo novo todo dia. Todos os usuários veem o mesmo conteúdo. Download gratuito. Pronto para publicar na Play Store!
+
+## 🎯 Conceito do App
+
+- 📹 **Um vídeo por dia** para TODOS os usuários
+- 🌍 **Mesmo conteúdo** para todos
+- 📥 **Download gratuito** sem restrições
+- 👨‍💼 **Você atualiza diariamente** via painel admin
+- 📱 **Android pronto** com Capacitor
+- 🚀 **Sem login** - acesso direto
+
+## 📁 Estrutura do Projeto
+
+- **backend/** - API Node.js com Express
+- **frontend/** - React com Vite + Capacitor
+- **android/** - Projeto Android nativo (gerado pelo Capacitor)
+
+## 🛠️ Tecnologias
+
+- Frontend: React, Vite, TailwindCSS, Capacitor
+- Backend: Node.js, Express, MongoDB
+- Mobile: Capacitor (iOS/Android)
+- Pagamento: Stripe (para paywall)
+
+## 🚀 Instalação Rápida
+
+### Backend
+```powershell
+cd backend
+npm install
+Copy-Item .env.example .env
+# Edite o .env com suas configurações
+npm run dev
+```
+
+### Frontend
+```powershell
+cd frontend
+npm install
+npm run dev
+```
+
+O app estará disponível em: http://localhost:5173
+
+## 📱 Build para Android
+
+```powershell
+cd frontend
+npm run android:build    # Build e sincroniza
+npm run android:open     # Abre no Android Studio
+npm run android:run      # Build e roda no dispositivo
+```
+
+Veja o guia completo em **[ANDROID.md](ANDROID.md)**
+
+## ⚙️ Variáveis de Ambiente
+
+Criar arquivo `.env` no backend:
+```env
+PORT=5000
+MONGODB_URI=mongodb://localhost:27017/meu-video-dia
+JWT_SECRET=seu_secret_key_aqui
+STRIPE_SECRET_KEY=sk_test_sua_chave_stripe
+FRONTEND_URL=http://localhost:5173
+```
+
+## 📝 Como Usar
+
+### Como Administrador:
+1. Acesse `http://localhost:5173/admin`
+2. Faça upload de um vídeo
+3. Defina título, descrição e data
+
+### Como Usuário:
+1. Acesse `http://localhost:5173`
+2. Assista o vídeo do dia
+3. Clique em "Desbloquear Downloads" para comprar acesso (R$ 29,90)
+4. Após o pagamento, baixe os vídeos
+
+## 🎨 Melhorias desta Versão
+
+✅ **Removido sistema de login** - Acesso mais simples e direto  
+✅ **Capacitor integrado** - Pronto para gerar app Android/iOS  
+✅ **Interface otimizada** - Mais limpa e responsiva  
+✅ **Scripts automatizados** - Build Android com um comando  
+
+## 📚 Documentação Adicional
+
+- **[INSTALACAO.md](INSTALACAO.md)** - Guia completo de instalação
+- **[ANDROID.md](ANDROID.md)** - Como gerar o app Android
+
+## 🔧 Scripts Disponíveis
+
+### Backend
+- `npm run dev` - Inicia servidor em modo desenvolvimento
+- `npm start` - Inicia servidor em produção
+
+### Frontend
+- `npm run dev` - Inicia Vite dev server
+- `npm run build` - Build para produção
+- `npm run android:build` - Build e prepara para Android
+- `npm run android:open` - Abre projeto no Android Studio
+- `npm run android:run` - Build e executa no Android
+
+## 🐛 Troubleshooting
+
+### Backend não conecta ao MongoDB
+- Instale o MongoDB Community Server
+- Ou use MongoDB Atlas (cloud gratuito)
+- Verifique a string de conexão no `.env`
+
+### Frontend não carrega vídeos
+- Certifique-se que o backend está rodando na porta 5000
+- Verifique o console do navegador para erros
+
+### Android não conecta ao backend
+- Use o IP local da sua máquina (não localhost)
+- Configure CORS no backend para aceitar conexões externas
+- Veja detalhes em [ANDROID.md](ANDROID.md)
+
+## 🚀 Próximos Passos
+
+- [ ] Adicionar notificações push quando novo vídeo for postado
+- [ ] Implementar cache offline com Service Worker
+- [ ] Adicionar compartilhamento de vídeos
+- [ ] Histórico de vídeos anteriores
+- [ ] Sistema de favoritos
+
+## 📄 Licença
+
+MIT
