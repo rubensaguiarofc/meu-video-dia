@@ -26,9 +26,8 @@ export class AdMobService {
 
     try {
       await AdMob.initialize({
-        // Defina como true durante testes, false em produção
-        testingDevices: ['YOUR_DEVICE_ID'], // Adicione o ID do seu dispositivo de teste
-        initializeForTesting: true, // Mude para false em produção
+        // Produção: não habilitar modo de teste
+        initializeForTesting: false,
       });
 
       this.isInitialized = true;
@@ -55,7 +54,7 @@ export class AdMobService {
       // Mostra diretamente o App Open Ad
       await AdMob.showAppOpenAd({
         adId,
-        isTesting: true, // Mude para false em produção
+        isTesting: false,
       });
 
       return true;
@@ -87,7 +86,7 @@ export class AdMobService {
       // Preparar o anúncio
       await AdMob.prepareRewardVideoAd({
         adId: adId,
-        isTesting: true, // Mude para false em produção
+        isTesting: false,
       });
 
       // Exibir o anúncio
@@ -137,7 +136,7 @@ export class AdMobService {
       // Preparar e exibir
       await AdMob.prepareRewardVideoAd({
         adId: adId,
-        isTesting: true, // Mude para false em produção
+        isTesting: false,
       });
 
       await AdMob.showRewardVideoAd();
