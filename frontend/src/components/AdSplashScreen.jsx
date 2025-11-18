@@ -23,10 +23,10 @@ const AdSplashScreen = ({ onComplete }) => {
     await new Promise(resolve => setTimeout(resolve, 1000));
 
     setStatus('watching');
-    setMessage('Assista ao anúncio para continuar');
+    setMessage('Exibindo anúncio de abertura...');
 
-    // Carregar e exibir anúncio
-    AdMobService.loadAndShowRewardedAd((success) => {
+    // Carregar e exibir App Open Ad
+    AdMobService.loadAndShowAppOpenAd((success) => {
       if (success) {
         setMessage('Anúncio concluído! Abrindo app...');
         setTimeout(() => onComplete(), 1000);

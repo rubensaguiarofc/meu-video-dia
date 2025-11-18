@@ -6,9 +6,11 @@ const AD_IDS = {
   android: {
     // ID de teste do Google - substitua pelo seu ID real depois
     rewardedVideo: 'ca-app-pub-3940256099942544/5224354917', // ID de teste
+    appOpen: 'ca-app-pub-3940256099942544/3419835294', // App Open de teste
   },
   ios: {
     rewardedVideo: 'ca-app-pub-3940256099942544/1712485313', // ID de teste
+    appOpen: 'ca-app-pub-3940256099942544/5662855259', // App Open de teste iOS
   }
 };
 
@@ -34,6 +36,39 @@ export class AdMobService {
     } catch (error) {
       console.error('Erro ao inicializar AdMob:', error);
     }
+  }
+
+  // Exibir App Open Ad (anúncio de abertura)
+  static async showAppOpenAd() {
+    if (!this.isNative) {
+      console.log('AdMob não disponível no navegador');
+      return true;
+    }
+
+    try {
+      await this.initialize();
+
+      const platform = Capacitor.getPlatform();
+      const adId = platform === 'android' ? AD_IDS.android.appOpen : AD_IDS.ios.appOpen;
+
+      // Em algumas versões do plugin não é necessário preparar previamente
+      // Mostra diretamente o App Open Ad
+      await AdMob.showAppOpenAd({
+        adId,
+        isTesting: true, // Mude para false em produção
+      });
+
+      return true;
+    } catch (error) {
+      console.error('Erro ao exibir App Open Ad:', error);
+      return false;
+    }
+  }
+
+  // Carregar e exibir App Open com callback
+  static async loadAndShowAppOpenAd(onComplete) {
+    const ok = await this.showAppOpenAd();
+    if (onComplete) onComplete(ok);
   }
 
   // Exibir anúncio recompensado (30 segundos)
