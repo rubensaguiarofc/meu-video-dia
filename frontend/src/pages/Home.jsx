@@ -148,18 +148,18 @@ const Home = () => {
                       Assista online gratuitamente ou desbloqueie downloads ilimitados:
                     </p>
                     <div className="text-center">
-                      <span className="text-4xl font-bold text-blue-600">R$ 9,90</span>
-                      <span className="text-gray-500 ml-2">pagamento único</span>
+                      <span className="text-4xl font-bold text-blue-600">R$ 1,99</span>
+                      <span className="text-gray-500 ml-2">por mês</span>
                     </div>
                     <ul className="mt-4 space-y-2 text-sm text-gray-600">
                       <li className="flex items-center">
                         <span className="mr-2">✅</span> Downloads ilimitados de todos os vídeos
                       </li>
                       <li className="flex items-center">
-                        <span className="mr-2">✅</span> Acesso offline permanente
+                        <span className="mr-2">✅</span> Acesso offline enquanto assinante
                       </li>
                       <li className="flex items-center">
-                        <span className="mr-2">✅</span> Sem mensalidade, pague uma vez
+                        <span className="mr-2">✅</span> Cancele quando quiser
                       </li>
                       <li className="flex items-center">
                         <span className="mr-2">✅</span> Suporte prioritário
@@ -173,7 +173,7 @@ const Home = () => {
                     className="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white py-4 rounded-lg font-semibold text-lg hover:shadow-xl transition flex items-center justify-center space-x-2 transform hover:scale-105 disabled:opacity-50"
                   >
                     <CreditCard className="w-6 h-6" />
-                    <span>{premiumLoading ? 'Carregando...' : `Desbloquear por R$ 9,90${isNative ? ' (Google Play)' : ''}`}</span>
+                    <span>{premiumLoading ? 'Carregando...' : `Assinar por R$ 1,99/mês${isNative ? ' (Google Play)' : ''}`}</span>
                   </button>
                   
                   {isNative && (

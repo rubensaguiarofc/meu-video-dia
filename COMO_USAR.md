@@ -53,9 +53,9 @@
 
 1. Assistir o vídeo normalmente (grátis)
 2. Para baixar, clicar no botão **"Baixar Vídeo"**
-3. Aparece paywall: **"Desbloquear por R$ 9,90"**
-4. Comprar uma única vez via Google Play
-5. Depois, download ilimitado para sempre! 🎉
+3. Aparece paywall: **"Assinar por R$ 1,99/mês"**
+4. Assinar mensalmente via Google Play
+5. Enquanto assinante, download ilimitado! 🎉
 
 ### 🔄 Restaurar Compra
 
@@ -141,11 +141,11 @@ Seguir: `PUBLICAR_PLAY_STORE.md`
 **Exemplo com 1000 usuários:**
 - 1000 usuários instalam (grátis)
 - 100 assistem vídeos regularmente (grátis)
-- 10 compram premium (R$ 9,90 cada)
-- **= R$ 99,00 de receita**
+- 10 assinam premium (R$ 1,99/mês cada)
+- **= R$ 19,90/mês de receita**
 
-**Google Play fica com 30%:**
-- Você recebe: **R$ 69,30**
+**Google Play fica com 15% (assinaturas):**
+- Você recebe: **R$ 16,92/mês**
 
 **Custos mensais:**
 - Railway: Grátis (500h/mês)
@@ -159,8 +159,9 @@ Seguir: `PUBLICAR_PLAY_STORE.md`
 ### Escalando
 
 Com 10.000 usuários e 1% de conversão:
-- 100 compradores × R$ 9,90 = R$ 990,00
-- Depois de taxas: **~R$ 693,00/mês**
+- 100 assinantes × R$ 1,99/mês = R$ 199,00/mês
+- Depois de taxas (15%): **~R$ 169,15/mês**
+- **Receita recorrente mensal!**
 
 ---
 
