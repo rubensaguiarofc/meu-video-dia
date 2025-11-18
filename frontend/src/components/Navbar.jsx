@@ -7,7 +7,7 @@ const Navbar = () => {
         <div className="flex justify-center items-center">
           <div className="flex items-center space-x-2">
             <Video className="w-8 h-8" />
-            <h1 className="text-2xl font-bold">Meu Vídeo do Dia</h1>
+            <h1 className="text-2xl font-bold">Video +18</h1>
           </div>
         </div>
       </div>
