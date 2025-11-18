@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import Navbar from '../components/Navbar';
+import AdSplashScreen from '../components/AdSplashScreen';
 import { Download, Eye, Lock, CreditCard, RefreshCw, X } from 'lucide-react';
 import { API_BASE_URL } from '../config';
 import { usePremium } from '../hooks/usePremium';
@@ -11,13 +12,17 @@ const Home = () => {
   const [error, setError] = useState('');
   const [downloading, setDownloading] = useState(false);
   const [showPaywall, setShowPaywall] = useState(false);
+  const [showAdSplash, setShowAdSplash] = useState(true);
   
   const { hasPremium, loading: premiumLoading, purchasePremium, restorePurchases, isNative } = usePremium();
 
   useEffect(() => {
-    axios.defaults.baseURL = API_BASE_URL;
-    fetchTodayVideo();
-  }, []);
+    // Só carrega o vídeo depois que o anúncio for exibido
+    if (!showAdSplash) {
+      axios.defaults.baseURL = API_BASE_URL;
+      fetchTodayVideo();
+    }
+  }, [showAdSplash]);
 
   const fetchTodayVideo = async () => {
     try {
@@ -65,6 +70,11 @@ const Home = () => {
       setShowPaywall(false);
     }
   };
+
+  // Mostrar splash screen com anúncio primeiro
+  if (showAdSplash) {
+    return <AdSplashScreen onComplete={() => setShowAdSplash(false)} />;
+  }
 
   if (loading) {
     return (
