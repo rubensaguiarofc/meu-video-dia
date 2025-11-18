@@ -6,7 +6,7 @@ const AD_IDS = {
   android: {
     // ID de teste do Google - substitua pelo seu ID real depois
     rewardedVideo: 'ca-app-pub-3940256099942544/5224354917', // ID de teste
-    appOpen: 'ca-app-pub-3940256099942544/3419835294', // App Open de teste
+    appOpen: 'ca-app-pub-5771833523730319/5292100565', // App Open real (Abertura do app)
   },
   ios: {
     rewardedVideo: 'ca-app-pub-3940256099942544/1712485313', // ID de teste
