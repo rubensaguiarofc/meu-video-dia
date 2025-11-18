@@ -183,7 +183,7 @@ export default function TermsOfService() {
               Para questões sobre estes Termos de Serviço, entre em contato:
             </p>
             <div className="bg-gray-100 dark:bg-gray-700 p-4 rounded-lg">
-              <p><strong>E-mail:</strong> rubensaguiarofc@gmail.com</p>
+              <p><strong>E-mail:</strong> alternativasolutions3@gmail.com</p>
               <p><strong>Responsável:</strong> Rubens Aguiar</p>
             </div>
           </section>
