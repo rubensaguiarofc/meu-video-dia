@@ -11,15 +11,9 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-// Middleware
-const allowedOrigins = [process.env.FRONTEND_URL, process.env.ADMIN_URL].filter(Boolean);
+// Middleware (CORS aberto novamente conforme solicitação)
 app.use(cors({
-  origin: (origin, callback) => {
-    if (!origin) return callback(null, true); // permitir requisições server-side/curl
-    if (allowedOrigins.length === 0) return callback(null, true); // fallback se não configurado
-    if (allowedOrigins.includes(origin)) return callback(null, true);
-    return callback(new Error('Origin not allowed by CORS')); 
-  },
+  origin: '*',
   credentials: true
 }));
 app.use(express.json());
