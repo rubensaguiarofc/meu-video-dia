@@ -31,6 +31,11 @@ export default function AdminUpload() {
       const backendUrl = import.meta.env.VITE_BACKEND_URL || 'https://meu-video-dia-production.up.railway.app';
       const uploadKey = import.meta.env.VITE_UPLOAD_KEY;
       
+      if (!uploadKey) {
+        setStatus('❌ Erro: VITE_UPLOAD_KEY não configurada no frontend');
+        return;
+      }
+      
       const res = await axios.post(`${backendUrl}/api/videos/upload`, formData, {
         headers: {
           'x-upload-key': uploadKey
