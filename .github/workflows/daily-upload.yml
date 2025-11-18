@@ -1,0 +1,48 @@
+name: Daily Video Upload
+
+on:
+  schedule:
+    - cron: '0 5 * * *' # 05:00 UTC diariamente
+  workflow_dispatch: {}
+
+jobs:
+  upload:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: Install backend deps
+        working-directory: backend
+        run: npm install
+
+      - name: Prepare video source
+        run: |
+          # Exemplo: baixar vídeo de uma URL pública (defina VIDEO_SOURCE_URL como secret)
+          if [ -n "${{ secrets.VIDEO_SOURCE_URL }}" ]; then
+            curl -L "${{ secrets.VIDEO_SOURCE_URL }}" -o daily.mp4
+          else
+            echo "Nenhuma VIDEO_SOURCE_URL definida; esperando arquivo commitado em repository (scripts/daily.mp4)";
+          fi
+          ls -lh
+
+      - name: Fallback copy committed file
+        if: ${{ !secrets.VIDEO_SOURCE_URL }}
+        run: |
+          if [ -f backend/scripts/daily.mp4 ]; then cp backend/scripts/daily.mp4 daily.mp4; fi
+
+      - name: Upload video to backend
+        env:
+          BACKEND_URL: ${{ secrets.BACKEND_URL }}
+          UPLOAD_KEY: ${{ secrets.UPLOAD_KEY }}
+        run: |
+          if [ ! -f daily.mp4 ]; then echo "Arquivo daily.mp4 não encontrado"; exit 1; fi
+          node backend/scripts/upload-today.js daily.mp4
+
+      - name: Cleanup
+        run: rm -f daily.mp4

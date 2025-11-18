@@ -3,6 +3,7 @@ import multer from 'multer';
 import path from 'path';
 import fs from 'fs';
 import Video from '../models/Video.js';
+import uploadKey from '../middleware/uploadKey.js';
 // Removido: authenticate, isAdmin - app sem login
 
 const router = express.Router();
@@ -38,7 +39,7 @@ const upload = multer({
 });
 
 // Upload de vídeo (SEM AUTENTICAÇÃO - app sem login)
-router.post('/upload', upload.single('video'), async (req, res) => {
+router.post('/upload', uploadKey, upload.single('video'), async (req, res) => {
   try {
     if (!req.file) {
       return res.status(400).json({ message: 'Nenhum vídeo foi enviado' });
@@ -205,7 +206,7 @@ router.get('/download/:id', async (req, res) => {
 });
 
 // Deletar vídeo (SEM AUTENTICAÇÃO - app sem login)
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', uploadKey, async (req, res) => {
   try {
     const video = await Video.findById(req.params.id);
     
