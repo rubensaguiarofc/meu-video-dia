@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import AdSplashScreen from '../components/AdSplashScreen';
-import { Lock, CreditCard, RefreshCw, X } from 'lucide-react';
+// Usando Material Icons no layout; sem ícones externos aqui
 import { API_BASE_URL } from '../config';
 import { usePremium } from '../hooks/usePremium';
 
@@ -16,6 +16,7 @@ const Home = () => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
+  const playerContainerRef = useRef(null);
   
   const { hasPremium, loading: premiumLoading, purchasePremium, restorePurchases, isNative } = usePremium();
 
@@ -60,6 +61,20 @@ const Home = () => {
     const el = videoRef.current;
     if (!el) return;
     setCurrentTime(el.currentTime || 0);
+  };
+
+  const handleFullscreen = async () => {
+    try {
+      const el = playerContainerRef.current || videoRef.current;
+      if (!el) return;
+      if (document.fullscreenElement) {
+        await document.exitFullscreen();
+      } else if (el.requestFullscreen) {
+        await el.requestFullscreen();
+      }
+    } catch (e) {
+      console.warn('Fullscreen não suportado:', e);
+    }
   };
 
   const fmt = (s) => {
@@ -159,7 +174,7 @@ const Home = () => {
         <div className="mx-auto max-w-sm">
           <div className="px-4">
             {/* Player com overlay */}
-            <div className="relative aspect-video w-full overflow-hidden rounded-lg shadow-lg bg-black">
+            <div ref={playerContainerRef} className="relative aspect-video w-full overflow-hidden rounded-lg shadow-lg bg-black">
               <video
                 ref={videoRef}
                 className="h-full w-full object-contain"
@@ -168,6 +183,7 @@ const Home = () => {
                 onTimeUpdate={onTimeUpdate}
                 src={video.videoUrl}
                 controls={false}
+                onClick={togglePlay}
               />
               {!isPlaying && (
                 <div className="absolute inset-0 flex items-center justify-center bg-black/40">
@@ -188,8 +204,8 @@ const Home = () => {
               </div>
               <div className="flex items-center gap-3">
                 <span className="material-icons !text-xl">closed_caption</span>
-                <span className="material-icons !text-xl" onClick={togglePlay}>{isPlaying ? 'pause' : 'play_arrow'}</span>
-                <span className="material-icons !text-xl">fullscreen</span>
+                <button className="text-left" onClick={togglePlay}><span className="material-icons !text-xl">{isPlaying ? 'pause' : 'play_arrow'}</span></button>
+                <button className="text-left" onClick={handleFullscreen}><span className="material-icons !text-xl">fullscreen</span></button>
               </div>
             </div>
           </div>
@@ -219,7 +235,7 @@ const Home = () => {
             </div>
 
             {/* Botão de download */}
-            <button
+              <button
               onClick={handleDownload}
               disabled={downloading}
               className="flex w-full items-center justify-center gap-3 rounded-lg bg-primary py-4 text-lg font-semibold text-white shadow-lg shadow-primary/30 transition-transform duration-200 active:scale-95 disabled:opacity-60"
@@ -249,10 +265,10 @@ const Home = () => {
                 onClick={() => setShowPaywall(false)}
                 className="absolute top-4 right-4 text-white hover:bg-white hover:bg-opacity-20 rounded-full p-1 transition"
               >
-                <X className="w-6 h-6" />
+                <span className="material-icons">close</span>
               </button>
               <div className="flex items-center justify-center mb-2">
-                <Lock className="w-12 h-12" />
+                <span className="material-icons !text-5xl">lock</span>
               </div>
               <h3 className="text-center text-2xl font-bold">
                 Desbloqueie os Downloads
@@ -290,7 +306,7 @@ const Home = () => {
                 disabled={premiumLoading}
                 className="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white py-4 rounded-lg font-semibold text-lg hover:shadow-xl transition flex items-center justify-center space-x-2 transform hover:scale-105 disabled:opacity-50"
               >
-                <CreditCard className="w-6 h-6" />
+                <span className="material-icons">credit_card</span>
                 <span>{premiumLoading ? 'Carregando...' : `Assinar por R$ 1,99/mês${isNative ? ' (Google Play)' : ''}`}</span>
               </button>
 
@@ -299,7 +315,7 @@ const Home = () => {
                   onClick={restorePurchases}
                   className="w-full border-2 border-blue-600 text-blue-600 py-3 rounded-lg font-semibold hover:bg-blue-50 transition flex items-center justify-center space-x-2"
                 >
-                  <RefreshCw className="w-5 h-5" />
+                  <span className="material-icons">refresh</span>
                   <span>Restaurar Compras</span>
                 </button>
               )}
