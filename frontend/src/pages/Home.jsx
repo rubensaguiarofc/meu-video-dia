@@ -1,8 +1,7 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
-import Navbar from '../components/Navbar';
 import AdSplashScreen from '../components/AdSplashScreen';
-import { Download, Eye, Lock, CreditCard, RefreshCw, X } from 'lucide-react';
+import { Lock, CreditCard, RefreshCw, X } from 'lucide-react';
 import { API_BASE_URL } from '../config';
 import { usePremium } from '../hooks/usePremium';
 
@@ -13,6 +12,10 @@ const Home = () => {
   const [downloading, setDownloading] = useState(false);
   const [showPaywall, setShowPaywall] = useState(false);
   const [showAdSplash, setShowAdSplash] = useState(true);
+  const videoRef = useRef(null);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [currentTime, setCurrentTime] = useState(0);
+  const [duration, setDuration] = useState(0);
   
   const { hasPremium, loading: premiumLoading, purchasePremium, restorePurchases, isNative } = usePremium();
 
@@ -33,6 +36,43 @@ const Home = () => {
     } finally {
       setLoading(false);
     }
+  };
+
+  const togglePlay = () => {
+    const el = videoRef.current;
+    if (!el) return;
+    if (el.paused) {
+      el.play();
+      setIsPlaying(true);
+    } else {
+      el.pause();
+      setIsPlaying(false);
+    }
+  };
+
+  const onLoadedMetadata = () => {
+    const el = videoRef.current;
+    if (!el) return;
+    setDuration(el.duration || 0);
+  };
+
+  const onTimeUpdate = () => {
+    const el = videoRef.current;
+    if (!el) return;
+    setCurrentTime(el.currentTime || 0);
+  };
+
+  const fmt = (s) => {
+    const mm = Math.floor(s / 60).toString().padStart(1, '0');
+    const ss = Math.floor(s % 60).toString().padStart(2, '0');
+    return `${mm}:${ss}`;
+  };
+
+  const todayStr = () => {
+    const d = new Date();
+    return d.toLocaleDateString('pt-BR', {
+      weekday: 'long', day: '2-digit', month: 'long', year: 'numeric'
+    });
   };
 
   const handleDownload = async () => {
@@ -79,7 +119,6 @@ const Home = () => {
   if (loading) {
     return (
       <>
-        <Navbar />
         <div className="min-h-screen flex items-center justify-center">
           <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
         </div>
@@ -90,7 +129,6 @@ const Home = () => {
   if (error) {
     return (
       <>
-        <Navbar />
         <div className="min-h-screen flex items-center justify-center">
           <div className="text-center">
             <h2 className="text-2xl font-bold text-gray-800 mb-4">😔 Ops!</h2>
@@ -103,58 +141,103 @@ const Home = () => {
 
   return (
     <>
-      <Navbar />
-      <div className="min-h-screen bg-gray-50 py-8">
-        <div className="container mx-auto px-4 max-w-4xl">
-          <div className="bg-white rounded-2xl shadow-xl overflow-hidden">
-            {/* Cabeçalho do Vídeo */}
-            <div className="bg-gradient-to-r from-blue-600 to-purple-600 text-white p-6">
-              <h2 className="text-3xl font-bold mb-2">{video.title}</h2>
-              <p className="text-blue-100">{video.description}</p>
-              <div className="flex items-center space-x-6 mt-4 text-sm">
-                <div className="flex items-center space-x-2">
-                  <Eye className="w-5 h-5" />
-                  <span>{video.views} visualizações</span>
+      {/* Header fixo estilo conceito */}
+      <header className="fixed top-0 left-0 right-0 z-10 mx-auto max-w-sm flex justify-between items-center p-4 bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-sm">
+        <button className="text-gray-800 dark:text-gray-200">
+          <span className="material-icons">arrow_back_ios_new</span>
+        </button>
+        <div className="flex items-center gap-2">
+          <svg className="h-6 w-6 text-primary" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14H9V8h2v8zm4 0h-2V8h2v8z"></path></svg>
+          <span className="text-xl font-bold text-gray-900 dark:text-white">Video +18</span>
+        </div>
+        <button className="text-gray-800 dark:text-gray-200">
+          <span className="material-icons">person_outline</span>
+        </button>
+      </header>
+
+      <main className="pt-20 pb-28">
+        <div className="mx-auto max-w-sm">
+          <div className="px-4">
+            {/* Player com overlay */}
+            <div className="relative aspect-video w-full overflow-hidden rounded-lg shadow-lg bg-black">
+              <video
+                ref={videoRef}
+                className="h-full w-full object-contain"
+                poster="/video-placeholder.png"
+                onLoadedMetadata={onLoadedMetadata}
+                onTimeUpdate={onTimeUpdate}
+                src={video.videoUrl}
+                controls={false}
+              />
+              {!isPlaying && (
+                <div className="absolute inset-0 flex items-center justify-center bg-black/40">
+                  <button className="group" onClick={togglePlay}>
+                    <div className="flex h-16 w-16 items-center justify-center rounded-full bg-primary/70 backdrop-blur-sm transition-all duration-300 group-hover:bg-primary">
+                      <span className="material-icons text-white !text-4xl">play_arrow</span>
+                    </div>
+                  </button>
                 </div>
-                <div className="flex items-center space-x-2">
-                  <Download className="w-5 h-5" />
-                  <span>{video.downloads} downloads</span>
+              )}
+            </div>
+
+            {/* Barra de status abaixo do vídeo */}
+            <div className="mt-3 flex items-center justify-between text-sm text-gray-500 dark:text-gray-400">
+              <div className="flex items-center gap-3">
+                <span className="material-icons !text-2xl text-gray-800 dark:text-gray-200">volume_up</span>
+                <span>{`${fmt(currentTime)} / ${fmt(duration || 0)}`}</span>
+              </div>
+              <div className="flex items-center gap-3">
+                <span className="material-icons !text-xl">closed_caption</span>
+                <span className="material-icons !text-xl" onClick={togglePlay}>{isPlaying ? 'pause' : 'play_arrow'}</span>
+                <span className="material-icons !text-xl">fullscreen</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Título e data */}
+          <div className="mt-6 space-y-6 px-4">
+            <div>
+              <div className="flex items-center justify-between">
+                <h1 className="text-3xl font-bold text-gray-900 dark:text-white">{video.title || 'DAILY ADVENTURE'}</h1>
+                <span className="rounded-md bg-red-500 px-3 py-1 text-sm font-semibold text-white">+18</span>
+              </div>
+              <p className="mt-1 text-gray-500 dark:text-gray-400">{todayStr()}</p>
+            </div>
+
+            {/* Métricas */}
+            <div className="rounded-lg bg-white/50 p-4 dark:bg-white/10">
+              <div className="flex items-center justify-between text-gray-700 dark:text-gray-300">
+                <div className="flex items-center gap-2">
+                  <span className="material-icons !text-xl text-primary">visibility</span>
+                  <span>{video.views} Views</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="material-icons !text-xl text-primary">download</span>
+                  <span>{video.downloads} Downloads</span>
                 </div>
               </div>
             </div>
 
-            {/* Reprodutor de Vídeo */}
-            <div className="bg-black">
-              <video
-                controls
-                className="w-full"
-                style={{ maxHeight: '600px' }}
-                poster="/video-placeholder.png"
-              >
-                <source src={video.videoUrl} type="video/mp4" />
-                Seu navegador não suporta o elemento de vídeo.
-              </video>
-            </div>
+            {/* Botão de download */}
+            <button
+              onClick={handleDownload}
+              disabled={downloading}
+              className="flex w-full items-center justify-center gap-3 rounded-lg bg-primary py-4 text-lg font-semibold text-white shadow-lg shadow-primary/30 transition-transform duration-200 active:scale-95 disabled:opacity-60"
+            >
+              <span className="material-icons">download</span>
+              {downloading ? 'Baixando...' : 'Download Video'}
+            </button>
 
-            {/* Botão de Download */}
-            <div className="p-6">
-              <button
-                onClick={handleDownload}
-                disabled={downloading}
-                className="w-full bg-gradient-to-r from-green-500 to-green-600 text-white py-4 rounded-lg font-semibold text-lg hover:shadow-lg transition disabled:opacity-50 flex items-center justify-center space-x-2"
-              >
-                <Download className="w-6 h-6" />
-                <span>{downloading ? 'Baixando...' : '📥 Baixar Vídeo'}</span>
-              </button>
-              {hasPremium && (
-                <p className="text-center text-sm text-green-600 mt-2">
-                  ✅ Você tem acesso premium!
-                </p>
-              )}
+            {/* Sobre */}
+            <div>
+              <h2 className="text-lg font-semibold text-gray-900 dark:text-white">Sobre este vídeo</h2>
+              <p className="mt-2 text-gray-600 dark:text-gray-400">
+                {video.description || 'Assista ao vídeo do dia. Novos conteúdos diariamente.'}
+              </p>
             </div>
           </div>
         </div>
-      </div>
+      </main>
 
       {/* Modal Paywall */}
       {showPaywall && (
