@@ -4,6 +4,7 @@ import path from 'path';
 import fs from 'fs';
 import Video from '../models/Video.js';
 import uploadKey from '../middleware/uploadKey.js';
+import { compressVideo } from '../utils/videoCompressor.js';
 // Removido: authenticate, isAdmin - app sem login
 
 const router = express.Router();
@@ -64,27 +65,63 @@ router.post('/upload', uploadKey, upload.single('video'), async (req, res) => {
       { isActive: false }
     );
 
-    const video = new Video({
-      title: title || 'Vídeo do Dia',
-      description: description || '',
-      filename: req.file.filename,
-      filepath: req.file.path,
-      date: targetDate,
-      isActive: true  // IMPORTANTE: marcar como ativo
-      // uploadedBy removido - app sem login
-    });
+    // Comprimir vídeo para otimizar streaming
+    const compressedFilename = 'compressed-' + req.file.filename;
+    const compressedPath = path.join('uploads/videos', compressedFilename);
+    
+    console.log('Comprimindo vídeo:', req.file.filename);
+    
+    try {
+      await compressVideo(req.file.path, compressedPath);
+      
+      // Remove o vídeo original após compressão bem-sucedida
+      fs.unlinkSync(req.file.path);
+      
+      const video = new Video({
+        title: title || 'Vídeo do Dia',
+        description: description || '',
+        filename: compressedFilename,
+        filepath: compressedPath,
+        date: targetDate,
+        isActive: true
+      });
 
-    await video.save();
+      await video.save();
 
-    res.status(201).json({
-      message: 'Vídeo enviado com sucesso',
-      video: {
-        id: video._id,
-        title: video.title,
-        description: video.description,
-        date: video.date
-      }
-    });
+      res.status(201).json({
+        message: 'Vídeo enviado e comprimido com sucesso',
+        video: {
+          id: video._id,
+          title: video.title,
+          description: video.description,
+          date: video.date
+        }
+      });
+    } catch (compressionError) {
+      console.error('Erro na compressão, usando vídeo original:', compressionError);
+      
+      // Se falhar, usa o vídeo original
+      const video = new Video({
+        title: title || 'Vídeo do Dia',
+        description: description || '',
+        filename: req.file.filename,
+        filepath: req.file.path,
+        date: targetDate,
+        isActive: true
+      });
+
+      await video.save();
+
+      res.status(201).json({
+        message: 'Vídeo enviado com sucesso (sem compressão)',
+        video: {
+          id: video._id,
+          title: video.title,
+          description: video.description,
+          date: video.date
+        }
+      });
+    }
   } catch (error) {
     res.status(500).json({ message: 'Erro ao enviar vídeo', error: error.message });
   }

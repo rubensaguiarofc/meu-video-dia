@@ -184,6 +184,8 @@ const Home = () => {
                 src={video.videoUrl}
                 controls={false}
                 onClick={togglePlay}
+                preload="auto"
+                playsInline
               />
               {!isPlaying && (
                 <div className="absolute inset-0 flex items-center justify-center bg-black/40">
