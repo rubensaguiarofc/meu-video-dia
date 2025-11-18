@@ -18,7 +18,7 @@ Escolha uma opção **GRATUITA**:
 5. Railway detecta automaticamente Node.js
 6. Adicione as variáveis de ambiente:
    ```
-   MONGODB_URI=mongodb+srv://admin:OA2IvNKeLlYDh8cc@meuvideocluster.vvqpsen.mongodb.net/meu-video-dia
+   MONGODB_URI=mongodb+srv://<USER>:<PASSWORD>@meuvideocluster.vvqpsen.mongodb.net/meu-video-dia
    PORT=5000
    ```
 7. Copie a URL gerada (exemplo: `https://seu-app.railway.app`)

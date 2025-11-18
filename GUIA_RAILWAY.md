@@ -70,7 +70,7 @@ No painel do Railway:
 2. Na aba **"Variables"**, adicione:
 
 ```
-MONGODB_URI=mongodb+srv://admin:OA2IvNKeLlYDh8cc@meuvideocluster.vvqpsen.mongodb.net/meu-video-dia?retryWrites=true&w=majority
+MONGODB_URI=mongodb+srv://<USER>:<PASSWORD>@meuvideocluster.vvqpsen.mongodb.net/meu-video-dia?retryWrites=true&w=majority
 PORT=5000
 NODE_ENV=production
 JWT_SECRET=seu_secret_key_aqui_muito_seguro
