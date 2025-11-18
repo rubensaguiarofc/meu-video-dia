@@ -1,6 +1,6 @@
 import formidable from 'formidable';
 import fs from 'fs';
-import path from 'path';
+import FormData from 'form-data';
 
 export const config = {
   api: {
@@ -24,8 +24,6 @@ export default async function handler(req, res) {
 
     try {
       // Reenviar para backend
-      const fetch = (await import('node-fetch')).default;
-      const FormData = (await import('form-data')).default;
       const formData = new FormData();
       formData.append('video', fs.createReadStream(file.filepath), file.originalFilename);
       if (fields.date) formData.append('date', fields.date);
