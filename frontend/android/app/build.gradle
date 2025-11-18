@@ -1,5 +1,12 @@
 apply plugin: 'com.android.application'
 
+// Load keystore properties if present (for release signing)
+def keystorePropertiesFile = rootProject.file("keystore.properties")
+def keystoreProperties = new Properties()
+if (keystorePropertiesFile.exists()) {
+    keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+}
+
 android {
     namespace "com.meuvideo.app"
     compileSdk rootProject.ext.compileSdkVersion
@@ -20,6 +27,22 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            // Apply signing config if keystore properties are available
+            if (keystoreProperties.containsKey('storeFile')) {
+                signingConfig signingConfigs.release
+            }
+        }
+    }
+
+    // Define signing configs (only used if keystore properties exist)
+    signingConfigs {
+        if (keystoreProperties.containsKey('storeFile')) {
+            release {
+                storeFile file(keystoreProperties['storeFile'])
+                storePassword keystoreProperties['storePassword']
+                keyAlias keystoreProperties['keyAlias']
+                keyPassword keystoreProperties['keyPassword']
+            }
         }
     }
 }

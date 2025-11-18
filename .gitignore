@@ -31,6 +31,17 @@ android/.idea/
 *.apk
 *.aab
 
+# Android (frontend subproject)
+frontend/android/.gradle/
+frontend/android/build/
+frontend/android/app/build/
+frontend/android/local.properties
+frontend/android/.idea/
+frontend/android/keystore.properties
+frontend/android/*.keystore
+frontend/android/app/*.keystore
+frontend/android/app/*.jks
+
 # Uploads (vídeos locais)
 backend/uploads/
 
