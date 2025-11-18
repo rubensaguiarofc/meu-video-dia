@@ -1,5 +1,10 @@
 # Meu Vídeo do Dia
 
+![GitHub repo size](https://img.shields.io/github/repo-size/rubensaguiarofc/meu-video-dia?style=for-the-badge)
+![GitHub last commit](https://img.shields.io/github/last-commit/rubensaguiarofc/meu-video-dia?style=for-the-badge)
+![GitHub stars](https://img.shields.io/github/stars/rubensaguiarofc/meu-video-dia?style=for-the-badge)
+![GitHub forks](https://img.shields.io/github/forks/rubensaguiarofc/meu-video-dia?style=for-the-badge)
+
 **🎬 App de vídeos diários para todos os usuários**
 
 Um vídeo novo todo dia. Todos os usuários veem o mesmo conteúdo. Download gratuito. Pronto para publicar na Play Store!
@@ -21,10 +26,19 @@ Um vídeo novo todo dia. Todos os usuários veem o mesmo conteúdo. Download gra
 
 ## 🛠️ Tecnologias
 
+![React](https://img.shields.io/badge/React-18.2.0-61DAFB?style=for-the-badge&logo=react&logoColor=white)
+![Node.js](https://img.shields.io/badge/Node.js-18+-339933?style=for-the-badge&logo=node.js&logoColor=white)
+![MongoDB](https://img.shields.io/badge/MongoDB-Atlas-47A248?style=for-the-badge&logo=mongodb&logoColor=white)
+![Vite](https://img.shields.io/badge/Vite-5.4-646CFF?style=for-the-badge&logo=vite&logoColor=white)
+![TailwindCSS](https://img.shields.io/badge/Tailwind-3.3-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white)
+![Capacitor](https://img.shields.io/badge/Capacitor-7.4-119EFF?style=for-the-badge&logo=capacitor&logoColor=white)
+![Railway](https://img.shields.io/badge/Railway-Deploy-0B0D0E?style=for-the-badge&logo=railway&logoColor=white)
+![Vercel](https://img.shields.io/badge/Vercel-Deploy-000000?style=for-the-badge&logo=vercel&logoColor=white)
+
 - Frontend: React, Vite, TailwindCSS, Capacitor
 - Backend: Node.js, Express, MongoDB
-- Mobile: Capacitor (iOS/Android)
-- Pagamento: Stripe (para paywall)
+- Mobile: Capacitor (Android)
+- Pagamento: Google Play Billing (RevenueCat)
 
 ## 🚀 Instalação Rápida
 
