@@ -23,7 +23,7 @@ export const usePremium = () => {
     try {
       // Configurar RevenueCat
       await Purchases.configure({
-        apiKey: 'SEU_REVENUECAT_API_KEY_AQUI', // Você vai criar isso
+        apiKey: 'sk_fVwhVLMkhMbNljlGpEFZkiXrIXkGH',
       });
 
       // Verificar status atual

@@ -93,7 +93,7 @@ const Home = () => {
 
   return (
     <>
-      <Navbar showAdmin="home" />
+      <Navbar />
       <div className="min-h-screen bg-gray-50 py-8">
         <div className="container mx-auto px-4 max-w-4xl">
           <div className="bg-white rounded-2xl shadow-xl overflow-hidden">
