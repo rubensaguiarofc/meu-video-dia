@@ -12,8 +12,14 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 
 // Middleware
+const allowedOrigins = [process.env.FRONTEND_URL, process.env.ADMIN_URL].filter(Boolean);
 app.use(cors({
-  origin: '*',  // Permitir todas as origens para vídeos funcionarem
+  origin: (origin, callback) => {
+    if (!origin) return callback(null, true); // permitir requisições server-side/curl
+    if (allowedOrigins.length === 0) return callback(null, true); // fallback se não configurado
+    if (allowedOrigins.includes(origin)) return callback(null, true);
+    return callback(new Error('Origin not allowed by CORS')); 
+  },
   credentials: true
 }));
 app.use(express.json());
