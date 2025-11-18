@@ -39,10 +39,26 @@ const Home = () => {
     }
   };
 
-  const togglePlay = () => {
+  const togglePlay = async () => {
     const el = videoRef.current;
     if (!el) return;
+    
     if (el.paused) {
+      // Entrar em fullscreen ao dar play
+      try {
+        const container = playerContainerRef.current || el;
+        if (container.requestFullscreen) {
+          await container.requestFullscreen();
+        } else if (container.webkitRequestFullscreen) {
+          await container.webkitRequestFullscreen();
+        } else if (el.webkitEnterFullscreen) {
+          // iOS Safari
+          el.webkitEnterFullscreen();
+        }
+      } catch (e) {
+        console.warn('Fullscreen não suportado:', e);
+      }
+      
       el.play();
       setIsPlaying(true);
     } else {
