@@ -4,9 +4,11 @@ import { Capacitor } from '@capacitor/core';
 // IDs de teste do AdMob (você vai substituir pelos IDs reais depois)
 const AD_IDS = {
   android: {
-    // ID de teste do Google - substitua pelo seu ID real depois
-    rewardedVideo: 'ca-app-pub-3940256099942544/5224354917', // ID de teste
-    appOpen: 'ca-app-pub-5771833523730319/5292100565', // App Open real (Abertura do app)
+    // IDs reais fornecidos
+    rewardedVideo: 'ca-app-pub-5771833523730319/4933430346', // Rewarded
+    appOpen: 'ca-app-pub-5771833523730319/7755158510', // App Open
+    banner: 'ca-app-pub-5771833523730319~5024507250', // Banner
+    interstitial: 'ca-app-pub-5771833523730319/4933430346', // Interstitial
   },
   ios: {
     rewardedVideo: 'ca-app-pub-3940256099942544/1712485313', // ID de teste

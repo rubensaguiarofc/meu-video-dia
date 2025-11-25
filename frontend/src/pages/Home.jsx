@@ -6,6 +6,25 @@ import { API_BASE_URL } from '../config';
 import { usePremium } from '../hooks/usePremium';
 
 const Home = () => {
+    // Confirmação ao sair do app (Android)
+    useEffect(() => {
+      const handleBackButton = (event) => {
+        event.preventDefault();
+        if (window.confirm('Deseja realmente sair do aplicativo?')) {
+          // Fecha o app (Capacitor)
+          if (window.Capacitor && window.Capacitor.Plugins && window.Capacitor.Plugins.App) {
+            window.Capacitor.Plugins.App.exitApp();
+          } else {
+            window.close();
+          }
+        }
+      };
+      // Android: escuta evento de backbutton
+      document.addEventListener('backbutton', handleBackButton, false);
+      return () => {
+        document.removeEventListener('backbutton', handleBackButton, false);
+      };
+    }, []);
   const [video, setVideo] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
@@ -31,7 +50,12 @@ const Home = () => {
   const fetchTodayVideo = async () => {
     try {
       const response = await axios.get('/api/videos/today');
-      setVideo(response.data);
+      // Garante que videoUrl é sempre absoluto
+      let videoData = response.data;
+      if (videoData && videoData.videoUrl && !videoData.videoUrl.startsWith('http')) {
+        videoData.videoUrl = API_BASE_URL + videoData.videoUrl;
+      }
+      setVideo(videoData);
     } catch (err) {
       setError(err.response?.data?.message || 'Nenhum vídeo disponível hoje');
     } finally {
@@ -177,9 +201,12 @@ const Home = () => {
         <button className="text-gray-800 dark:text-gray-200">
           <span className="material-icons">arrow_back_ios_new</span>
         </button>
-        <div className="flex items-center gap-2">
-          <svg className="h-6 w-6 text-primary" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14H9V8h2v8zm4 0h-2V8h2v8z"></path></svg>
-          <span className="text-xl font-bold text-gray-900 dark:text-white">Video +18</span>
+        <div className="flex flex-col items-center gap-1">
+          <div className="flex items-center gap-2">
+            <svg className="h-6 w-6 text-primary" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14H9V8h2v8zm4 0h-2V8h2v8z"></path></svg>
+            <span className="text-xl font-bold text-gray-900 dark:text-white">Video +18</span>
+          </div>
+          <span className="text-xs text-gray-500">Versão {process.env.REACT_APP_VERSION || '1.0'} (Build {process.env.REACT_APP_BUILD || '1'})</span>
         </div>
         <button className="text-gray-800 dark:text-gray-200">
           <span className="material-icons">person_outline</span>
@@ -197,12 +224,35 @@ const Home = () => {
                 poster="/video-placeholder.png"
                 onLoadedMetadata={onLoadedMetadata}
                 onTimeUpdate={onTimeUpdate}
-                src={video.videoUrl}
+                src={video?.videoUrl}
                 controls={false}
-                onClick={togglePlay}
+                onClick={async () => {
+                  await togglePlay();
+                  // Tenta forçar fullscreen imediatamente após play
+                  const el = videoRef.current;
+                  if (el) {
+                    const container = playerContainerRef.current || el;
+                    if (container.requestFullscreen) {
+                      container.requestFullscreen();
+                    } else if (container.webkitRequestFullscreen) {
+                      container.webkitRequestFullscreen();
+                    } else if (el.webkitEnterFullscreen) {
+                      el.webkitEnterFullscreen();
+                    }
+                  }
+                }}
                 preload="auto"
                 playsInline
               />
+              {/* Botão para sair do fullscreen */}
+              {typeof document !== 'undefined' && document.fullscreenElement && (
+                <button
+                  onClick={() => document.exitFullscreen()}
+                  className="absolute top-4 right-4 z-50 bg-black/60 text-white p-2 rounded-full"
+                >
+                  Sair
+                </button>
+              )}
               {!isPlaying && (
                 <div className="absolute inset-0 flex items-center justify-center bg-black/40">
                   <button className="group" onClick={togglePlay}>

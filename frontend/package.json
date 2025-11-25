@@ -11,7 +11,7 @@
     "android:open": "npx cap open android",
     "android:run": "npm run build && npx cap sync android && npx cap run android",
     "android:release": "npm run build && npx cap sync android && cd android && ./gradlew bundleRelease",
-    "generate:icons": "node scripts/generate-icons.js"
+    "generate:icons": "node scripts/generate-icons.cjs"
   },
   "dependencies": {
     "@capacitor-community/admob": "^7.2.0",
@@ -32,8 +32,8 @@
     "@vitejs/plugin-react": "^4.2.1",
     "autoprefixer": "^10.4.16",
     "postcss": "^8.4.32",
+    "sharp": "^0.33.5",
     "tailwindcss": "^3.3.6",
-    "vite": "^5.0.8",
-    "sharp": "^0.33.3"
+    "vite": "^5.0.8"
   }
 }
